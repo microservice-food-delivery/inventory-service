@@ -5,6 +5,7 @@ import com.takehomettb.inventory_service.entity.ReturnStatus
 import com.takehomettb.inventory_service.repository.FoodRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import java.time.LocalDateTime
 import java.util.*
 
 @Service
@@ -13,9 +14,29 @@ class FoodService {
 
     fun getAllFoods(): List<Food> = foodRepository.findAll()
 
-    fun getFoodById(id: Int): Food? = foodRepository.findById(id).orElse(null)
+    fun getFoodById(id: Int): Any {
+        return foodRepository.findById(id).orElse(null) ?: mapOf(
+            "status" to false,
+            "message" to "ไม่มีอาหารรายการนี้"
+        )
+    }
 
-    fun createFood(food: Food): Food = foodRepository.save(food)
+    fun createFood(food: Food): Any {
+        if(food.name.isNullOrEmpty()) {
+            return mapOf(
+                "status" to false,
+                "message" to "กรุณากรอกชื่อเมนูอาหาร"
+            )
+        }
+        if(food.price == null) {
+            return mapOf(
+                "status" to false,
+                "message" to "กรุณากรอกราคาเมนูอาหาร"
+            )
+        }
+        return foodRepository.save(food)
+
+    }
 
     fun updateFood(id: Int, food: Food): Any {
         var result: Food = foodRepository.findById(id).orElse(null)
@@ -30,6 +51,7 @@ class FoodService {
             result.price = food.price
         }
         try {
+            result.updatedAt = LocalDateTime.now()
             result = foodRepository.save(result)
             return ReturnStatus(
                 status = true,

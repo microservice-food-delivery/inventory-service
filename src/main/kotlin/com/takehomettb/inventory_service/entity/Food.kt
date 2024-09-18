@@ -2,6 +2,7 @@ package com.takehomettb.inventory_service.entity
 
 import jakarta.persistence.*
 import java.math.BigDecimal
+import java.time.LocalDateTime
 
 @Entity
 @Table(name = "food_inventory")
@@ -16,4 +17,10 @@ data class Food(
 
     @Column(name = "price", nullable = true)
     var price: BigDecimal? = null,
+
+    @Column(name = "created_at", updatable = false)
+    var createdAt: LocalDateTime? = LocalDateTime.now(),
+
+    @Column(name = "updated_at")
+    var updatedAt: LocalDateTime? = LocalDateTime.now(),
 )

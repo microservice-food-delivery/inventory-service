@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*
 class FoodController {
     @Autowired lateinit var foodService: FoodService
 
-    @GetMapping("/get")
+    @GetMapping("/getFoods")
     fun getAllInventory(): ResponseEntity<Any> {
         return ResponseEntity.ok().body(foodService.getAllFoods())
     }
@@ -22,12 +22,12 @@ class FoodController {
         return ResponseEntity.ok().body(foodService.getFoodById(Integer.parseInt(foodId)))
     }
 
-    @PostMapping("/food")
+    @PostMapping("/createFood")
     fun createFood(@RequestBody food: Food): ResponseEntity<Any> {
         return ResponseEntity.ok().body(foodService.createFood(food))
     }
 
-    @PutMapping("/food/{foodId}")
+    @PutMapping("/updateFood/{foodId}")
     fun updateFood(@PathVariable foodId: Int, @RequestBody food: Food): ResponseEntity<Any> {
         return ResponseEntity.ok().body(foodService.updateFood(foodId, food))
     }
